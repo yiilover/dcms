@@ -50,6 +50,12 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'rules' =>
+            [
+                [
+                    'class'=>'yii\rest\UrlRule', 'controller'=>'goods',
+                ]
+            ],
         ],
         'config' => [
             'class' => 'app\components\Config',
