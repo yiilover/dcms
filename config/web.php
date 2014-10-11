@@ -1,0 +1,73 @@
+<?php
+
+$params = require(__DIR__ . '/params.php');
+//$db = require(__DIR__ . '/db.php');
+$db = require(__DIR__ . '/database.php');
+
+$config = [
+    'id' => 'basic',
+    'basePath' => dirname(__DIR__),
+    'bootstrap' => ['log'],
+    'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
+    'modules' => ['admin'=>'app\modules\admin\Module','tcadmin'=>
+    ['class'=>'app\modules\tcadmin\Module'],
+
+    ],
+    'timeZone'=>'Asia/Chongqing',
+    'language' => 'zh-CN',
+    'components' => [
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+        'user' => [
+            'identityClass' => 'app\models\User',
+            'enableAutoLogin' => true,
+        ],
+        'errorHandler' => [
+            'errorAction' => 'site/error',
+        ],
+        'mail' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            // 'useFileTransport' => true,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.qq.com',
+                'username' => '1234@qq.com',
+                'password' => 'password',
+                'port' => '465',
+                'encryption' => 'ssl',
+            ],
+        ],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+        ],
+        'config' => [
+            'class' => 'app\components\Config',
+            'cacheID' =>'cache'
+        ],
+        'db' => $db['db'],
+        'tcdb' => $db['tcdb'],
+    ],
+    'params' => $params,
+];
+
+if (YII_ENV_DEV) {
+    // configuration adjustments for 'dev' environment
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = 'yii\debug\Module';
+
+    $config['bootstrap'][] = 'gii';
+    $config['modules']['gii'] = 'yii\gii\Module';
+}
+
+return $config;
